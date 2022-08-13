@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Post{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form method=post enctype=multipart/form-data>
+  
+  <input type=file name=file id="fil">
+  <input type=submit value=Upload>
+</form>
+<style>
+  input#fil {
+    /* visibility: hidden; */
+    outline: 2px dashed #92b0b3;
+    outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    font-size: 1.25rem;
+    background-color: #c8dadf;
+    position: relative;
+    padding: 7rem 2rem;
+}
+input#fil::before {
+    margin-inline-end: 1rem;
+    content: 'drop file here or';
+    margin-inline-start: 6rem;
+}
+</style>
+{% endblock %}
+
+

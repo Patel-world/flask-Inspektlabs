@@ -1,0 +1,53 @@
+<!doctype html>
+<title>{% block title %}{% endblock %} - Flaskr</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<nav>
+  <h1>ImgFair</h1>
+  <ul>
+    {% if g.user %}
+      <li><span>{{ g.user['name'] }}</span>
+      <li><a href="/logout">Log Out</a>
+    {% else %}
+      
+    <div>login to upload</div> <div id="buttonDiv"></div>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/8.0.20/jsrsasign-all-min.js"></script>
+
+    <script>
+      let xhr = new XMLHttpRequest();
+      xhr.open("POST", "https://flask-inspektlabs.herokuapp.com/login");
+      
+      xhr.setRequestHeader("Accept", "application/json");
+      xhr.setRequestHeader("Content-Type", "application/json");
+      
+      xhr.onload = () => console.log(xhr.responseText);
+
+    function handleCredentialResponse(response) {
+      //console.log("Encoded JWT ID token: " + response.credential);
+      xhr.send(JSON.stringify({'jwt':response.credential}));
+      window.location.href=window.location.href+'upload'
+    }
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: "21450313655-ub01co0qe1i4bug295ohhoajd4einlk5.apps.googleusercontent.com",
+        callback: handleCredentialResponse
+      });
+      google.accounts.id.renderButton(
+        document.getElementById("buttonDiv"),
+        { theme: "outline", size: "large" }  // customization attributes
+      );
+      google.accounts.id.prompt(); // also display the One Tap dialog
+    }
+</script>
+    {% endif %}
+  </ul>
+</nav>
+<section class="content">
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  {% block content %}{% endblock %}
+</section>
